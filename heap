@@ -1,0 +1,119 @@
+#include<iostream>
+#include<queue>
+using namespace std;
+
+typedef int element_t; //Element type of the stack
+//typedef struct bintree_node{
+//	element_t value;
+//	bintree_node* left;
+//	bintree_node* right;
+//} bintree_node;
+
+int Parent(int i);
+int Left(int i);
+int Right(int i);
+void Max_Heapify(int A[],int i,int* length);
+void BuildMax_Heap(int A[],int* length);
+element_t HeapMaximum(int A[]);
+element_t HeapExtractMax(int A[],int* length);
+int Max_HeapInsert(int A[],int  element_t,int* length );
+//int HeapIncreaseKey(int A[], int i, int amount);
+void print(int A[],int* length);
+
+int main(){
+    int A[] = {6,5,3,1,8,7,2,4};
+    int len = sizeof(A)/sizeof(A[0]);
+    int* length = &len;
+    cout << "A = {6, 5, 3, 1, 8, 7, 2, 4}" << endl;
+    cout << "BuildMax-Heap(A)"<< endl;
+    BuildMax_Heap(A,length);
+    cout << "-> print A" << endl;
+    print(A,length);
+    cout << "-> print HeapMaximum(A)" << endl;
+    cout << HeapMaximum(A) << endl;
+    cout << "-> print HeapExtractMax(A)" << endl;
+    cout << HeapExtractMax(A,length) << endl;
+    cout << "Max-HeapInsert(A, 9)" << endl;
+    Max_HeapInsert(A,9,length);
+    cout << "-> print HeapMaximum(A)" << endl;
+    cout << HeapMaximum(A) <<endl;
+    return 0;
+}
+
+int Parent(int i){
+    if(i%2 == 0)
+        return (i/2)-1;
+    else
+        return i/2;
+}
+
+int left(int i){
+    return 2*i + 1;
+}
+
+int right(int i){
+    return 2*i + 2;
+}
+
+void Max_Heapify(int A[],int i,int *length){
+    int l = left(i);
+    int r = right(i);
+    int largest;
+    if ((r <= *length) && (l <= *length)){
+        if ((l <= *length) && (A[l] > A[i]))
+            largest = l;
+        else
+            largest = i;
+        if ((r <= *length) && (A[r] > A[largest]))
+            largest = r;
+        if(largest != i){
+            element_t temp1 = A[i];
+            element_t temp2 = A[largest];
+            A[i] = temp2;
+            A[largest] = temp1;
+            Max_Heapify(A,largest,length);
+        }
+    }
+    else
+        return ;
+}
+
+void BuildMax_Heap(int A[],int *length){
+    for(int i = ((*length/2)-1) ; i >= 0 ; i--){
+        Max_Heapify(A,i,length);
+    }
+}
+
+element_t HeapMaximum(int A[]){
+    return A[0];
+}
+
+element_t HeapExtractMax(int A[],int* length){
+    if (*length < 1){//under flow
+        return NULL;
+    }
+    element_t maximum = A[0];
+    A[0] = A[*length - 1];
+    (*length)--;
+    Max_Heapify(A,0,length);
+    return maximum;
+}
+int Max_HeapInsert(int A[],element_t element,int* length){
+    A[*length] = element;
+    (*length)++;
+    int i = (*length) - 1;
+    while (i>=0 && A[Parent(i)] < A[i]){
+        element_t temp = A[i];
+        A[i]  = A[Parent(i)];
+        A[Parent(i)] = temp;
+        i = Parent(i);
+    }
+}
+
+void print(int A[],int* length){
+    for(int i = 0;i < *length;i++){
+        cout << "-" << A[i] << "-";
+    }
+    cout << "\n";
+}
+

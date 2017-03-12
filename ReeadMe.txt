@@ -1,0 +1,10 @@
+index - 13061F
+Name - Vinujan.S
+
+
+how to run...........
+
+i hva uploaded code with .o file and .exe file to run it you can compile
+ and run .cpp file else you can open a command prompt in the 
+current directory and drag and put the .exe file in that and 
+press enter............
